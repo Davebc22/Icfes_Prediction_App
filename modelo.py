@@ -7,6 +7,15 @@ class Modelo:
         self.datos = pd.read_csv(ruta_datos, sep=',', low_memory=False)
         self.model = None
 
+    import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
+class Modelo:
+    def __init__(self, ruta_datos):
+        self.datos = pd.read_csv(ruta_datos, sep=',', low_memory=False)
+        self.model = None
+
     def preprocesar_datos(self):
         columnas = ['ESTU_GENERACION-E',
                     'COLE_MCPIO_UBICACION',
@@ -53,19 +62,19 @@ class Modelo:
 
         datos = self.datos[(self.datos['EDAD'] >= 10) & (self.datos['EDAD'] <= 90)]
 
-        # Codifica tus columnas categóricas
+        # Codificar columnas categóricas
         datos_codificados = pd.get_dummies(datos)
 
-        # Define tus características y etiquetas
+        # Definir características y etiquetas
         X = datos_codificados.drop('PUNT_GLOBAL', axis=1)
         datos_codificados['RESULTADO'] = pd.cut(datos_codificados['PUNT_GLOBAL'], bins=4,
                                                 labels=['Bajo', 'Intermedio ', 'Alto', 'Sobresaliente'])
         y = datos_codificados['RESULTADO']
 
-        # Divide tus datos en conjuntos de entrenamiento y prueba
+        # Dividir  datos en conjuntos de entrenamiento y prueba
         self.X_train, _, self.y_train, _ = train_test_split(X, y, test_size=0.4, random_state=0)
 
-        # Crea y entrena tu modelo
+        # Crear y entrenar modelo
         self.model = RandomForestClassifier(n_estimators=100, random_state=42)
         self.model.fit(self.X_train, self.y_train)
 
@@ -82,6 +91,11 @@ class Modelo:
         # Asegurarse de que todas las columnas utilizadas durante el entrenamiento estén presentes en las nuevas características
         nuevas_caracteristicas_ajustadas = nuevas_caracteristicas_ajustadas.reindex(columns=self.X_train.columns,
                                                                                     fill_value=0)
+
+        # Resultado de la predicción
+        resultado_prediccion = self.model.predict(nuevas_caracteristicas_ajustadas)
+        print(f'\nResultado de la Predicción: {resultado_prediccion[0]}')
+                     fill_value=0)
 
         # Resultado de la predicción
         resultado_prediccion = self.model.predict(nuevas_caracteristicas_ajustadas)
