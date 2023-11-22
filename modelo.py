@@ -6,66 +6,40 @@ class Modelo:
     def __init__(self, ruta_datos):
         self.datos = pd.read_csv(ruta_datos, sep=',', low_memory=False)
         self.model = None
+        self.X_train = None
+        self.y_train = None
 
     def preprocesar_datos(self):
-        columnas = ['ESTU_GENERACION-E',
-                    'COLE_MCPIO_UBICACION',
-                    'COLE_DEPTO_UBICACION',
-                    'ESTU_MCPIO_PRESENTACION',
-                    'ESTU_DEPTO_PRESENTACION',
-                    'ESTU_TIPOREMUNERACION',
-                    'ESTU_NACIONALIDAD',
-                    'ESTU_PAIS_RESIDE',
-                    'ESTU_DEPTO_RESIDE',
-                    'ESTU_MCPIO_RESIDE',
-                    'FAMI_ESTRATOVIVIENDA',
-                    'FAMI_TRABAJOLABORPADRE',
-                    'FAMI_TRABAJOLABORMADRE',
-                    'FAMI_TIENELAVADORA',
-                    'FAMI_NUMLIBROS',
-                    'FAMI_SITUACIONECONOMICA']
+        columnas_a_eliminar = ['ESTU_GENERACION-E', 'COLE_MCPIO_UBICACION', 'COLE_DEPTO_UBICACION',
+                               'ESTU_MCPIO_PRESENTACION', 'ESTU_DEPTO_PRESENTACION', 'ESTU_TIPOREMUNERACION',
+                               'ESTU_NACIONALIDAD', 'ESTU_PAIS_RESIDE', 'ESTU_DEPTO_RESIDE', 'ESTU_MCPIO_RESIDE',
+                               'FAMI_ESTRATOVIVIENDA', 'FAMI_TRABAJOLABORPADRE', 'FAMI_TRABAJOLABORMADRE',
+                               'FAMI_TIENELAVADORA', 'FAMI_NUMLIBROS', 'FAMI_SITUACIONECONOMICA']
 
-        self.datos.drop(columnas, axis='columns', inplace=True)
+        self.datos.drop(columnas_a_eliminar, axis='columns', inplace=True)
 
     def regresion(self):
-        columnas = ['FAMI_PERSONASHOGAR',
-                    'FAMI_CUARTOSHOGAR',
-                    'FAMI_EDUCACIONPADRE',
-                    'FAMI_EDUCACIONMADRE',
-                    'ESTU_NSE_INDIVIDUAL',
-                    'FAMI_TIENEINTERNET',
-                    'FAMI_TIENECOMPUTADOR',
-                    'FAMI_TIENESERVICIOTV',
-                    'FAMI_TIENEHORNOMICROOGAS',
-                    'FAMI_TIENEAUTOMOVIL',
-                    'FAMI_TIENECONSOLAVIDEOJUEGOS',
-                    'FAMI_TIENEMOTOCICLETA',
-                    'FAMI_COMELECHEDERIVADOS',
-                    'FAMI_COMECARNEPESCADOHUEVO',
-                    'FAMI_COMECEREALFRUTOSLEGUMBRE',
-                    'ESTU_DEDICACIONLECTURADIARIA',
-                    'ESTU_DEDICACIONINTERNET',
-                    'ESTU_HORASSEMANATRABAJA',
-                    'COLE_CARACTER',
-                    'COLE_AREA_UBICACION',
-                    'COLE_JORNADA',
-                    'EDAD']
+        columnas_a_mantener = ['FAMI_PERSONASHOGAR', 'FAMI_CUARTOSHOGAR', 'FAMI_EDUCACIONPADRE',
+                               'FAMI_EDUCACIONMADRE', 'ESTU_NSE_INDIVIDUAL', 'FAMI_TIENEINTERNET',
+                               'FAMI_TIENECOMPUTADOR', 'FAMI_TIENESERVICIOTV', 'FAMI_TIENEHORNOMICROOGAS',
+                               'FAMI_TIENEAUTOMOVIL', 'FAMI_TIENECONSOLAVIDEOJUEGOS', 'FAMI_TIENEMOTOCICLETA',
+                               'FAMI_COMELECHEDERIVADOS', 'FAMI_COMECARNEPESCADOHUEVO', 'FAMI_COMECEREALFRUTOSLEGUMBRE',
+                               'ESTU_DEDICACIONLECTURADIARIA', 'ESTU_DEDICACIONINTERNET', 'ESTU_HORASSEMANATRABAJA',
+                               'COLE_CARACTER', 'COLE_AREA_UBICACION', 'COLE_JORNADA', 'EDAD']
 
-        datos = self.datos[(self.datos['EDAD'] >= 10) & (self.datos['EDAD'] <= 90)]
+        datos_filtrados = self.datos[(self.datos['EDAD'] >= 10) & (self.datos['EDAD'] <= 90)]
 
-        # Codifica tus columnas categóricas
-        datos_codificados = pd.get_dummies(datos)
+        # Codificar columnas categóricas
+        datos_codificados = pd.get_dummies(datos_filtrados)
 
-        # Define tus características y etiquetas
+        # Definir características y etiquetas
         X = datos_codificados.drop('PUNT_GLOBAL', axis=1)
-        datos_codificados['RESULTADO'] = pd.cut(datos_codificados['PUNT_GLOBAL'], bins=4,
-                                                labels=['Bajo', 'Intermedio ', 'Alto', 'Sobresaliente'])
-        y = datos_codificados['RESULTADO']
+        y = pd.cut(datos_codificados['PUNT_GLOBAL'], bins=4, labels=['Bajo', 'Intermedio ', 'Alto', 'Sobresaliente'])
 
-        # Divide tus datos en conjuntos de entrenamiento y prueba
+        # Dividir datos en conjuntos de entrenamiento y prueba
         self.X_train, _, self.y_train, _ = train_test_split(X, y, test_size=0.4, random_state=0)
 
-        # Crea y entrena tu modelo
+        # Crear y entrenar modelo
         self.model = RandomForestClassifier(n_estimators=100, random_state=42)
         self.model.fit(self.X_train, self.y_train)
 
@@ -85,4 +59,5 @@ class Modelo:
 
         # Resultado de la predicción
         resultado_prediccion = self.model.predict(nuevas_caracteristicas_ajustadas)
-        print(f'\nResultado de la Predicción: {resultado_prediccion[0]}')
+        print(resultado_prediccion[0])
+        return resultado_prediccion[0]
