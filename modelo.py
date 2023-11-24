@@ -59,5 +59,5 @@ class Modelo:
 
         # Resultado de la predicción
         resultado_prediccion = self.model.predict(nuevas_caracteristicas_ajustadas)
-        print(resultado_prediccion[0])
+        print(f'Tus resultados serán: {resultado_prediccion[0]}')
         return resultado_prediccion[0]

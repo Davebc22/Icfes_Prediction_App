@@ -5,7 +5,7 @@ class InterfazPrediccion(tk.Tk):
         super().__init__()
 
         self.title("Interfaz de Predicción")
-        self.geometry("400x400")
+        self.geometry("800x600")
 
         self.nuevas_caracteristicas = nuevas_caracteristicas
         self.callback = callback
@@ -15,12 +15,21 @@ class InterfazPrediccion(tk.Tk):
     def crear_interfaz(self):
         tk.Label(self, text="Por favor, ingrese los siguientes datos:").pack()
 
+        frame1 = tk.Frame(self)
+        frame1.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        frame2 = tk.Frame(self)
+        frame2.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+
         for idx, (caracteristica, mensaje) in enumerate(self.nuevas_caracteristicas.items(), start=1):
-            tk.Label(self, text=f"{idx}. {mensaje}").pack()
+            if idx <= 11:
+                frame = frame1
+            else:
+                frame = frame2
 
-            entry = tk.Entry(self)
+            tk.Label(frame, text=f"{idx}. {mensaje}").pack()
+            entry = tk.Entry(frame)
             entry.pack()
-
             self.nuevas_caracteristicas[caracteristica] = entry
 
         button = tk.Button(self, text="Realizar Predicción", command=self.obtener_valores)
@@ -35,8 +44,16 @@ class InterfazPrediccion(tk.Tk):
             self.nuevas_caracteristicas[caracteristica] = (int(valor),)
 
         # Llamar a la función de devolución de llamada con los valores recopilados
-        self.callback(self.nuevas_caracteristicas)
+        resultado = self.callback(self.nuevas_caracteristicas)
 
-        self.destroy()  # Cerrar la interfaz después de obtener los valores
+        # Crear una nueva ventana para mostrar el resultado
+        resultado_ventana = tk.Toplevel(self)
+        resultado_ventana.title("Resultado de la Predicción")
 
+        # Agregar un widget Label para mostrar el resultado
+        resultado_label = tk.Label(resultado_ventana, text=f"El resultado de la predicción es: {resultado}")
+        resultado_label.pack()
 
+        # Agregar un botón para cerrar la ventana
+        cerrar_boton = tk.Button(resultado_ventana, text="Cerrar", command=resultado_ventana.destroy)
+        cerrar_boton.pack()

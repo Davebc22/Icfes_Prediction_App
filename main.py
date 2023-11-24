@@ -10,6 +10,7 @@ logica_instancia.entrenar_modelo()
 def callback(valores):
     # Definir resultado_prediccion
     resultado_prediccion = logica_instancia.predecir_nuevas_caracteristicas(valores)
+    print(f"Resultado en callback: {resultado_prediccion}")
     return resultado_prediccion
 
 # Generar dinámicamente las etiquetas y mensajes para nuevas_caracteristicas
