@@ -13,33 +13,26 @@ def callback(valores):
     print(f"Resultado en callback: {resultado_prediccion}")
     return resultado_prediccion
 
-# Generar dinámicamente las etiquetas y mensajes para nuevas_caracteristicas
-nuevas_caracteristicas = {    'FAMI_PERSONASHOGAR': 'Ingrese el número de personas en el hogar: ',
-    'FAMI_CUARTOSHOGAR': 'Ingrese el número de cuartos en el hogar: ' ,
-    'FAMI_EDUCACIONPADRE': 'Ingrese el nivel de educación del padre (1-5): ' ,
-    'FAMI_EDUCACIONMADRE': 'Ingrese el nivel de educación de la madre (1-5): ' ,
-    'ESTU_NSE_INDIVIDUAL': 'Ingrese el NSE individual (1-5): ' ,
-    'FAMI_TIENEINTERNET': '¿Tiene acceso a Internet? Ingrese 1 si sí, 0 si no: ' ,
-    'FAMI_TIENECOMPUTADOR': '¿Tiene computador en casa? Ingrese 1 si sí, 0 si no: ' ,
-    'FAMI_TIENESERVICIOTV': '¿Tiene servicio de TV? Ingrese 1 si sí, 0 si no: ' ,
-    'FAMI_TIENEHORNOMICROOGAS': '¿Tiene horno microondas o gas? Ingrese 1 si sí, 0 si no: ' ,
-    'FAMI_TIENEAUTOMOVIL': '¿Tiene automóvil? Ingrese 1 si sí, 0 si no: ' ,
-    'FAMI_TIENECONSOLAVIDEOJUEGOS': '¿Tiene consola de videojuegos? Ingrese 1 si sí, 0 si no: ' ,
-    'FAMI_TIENEMOTOCICLETA': '¿Tiene motocicleta? Ingrese 1 si sí, 0 si no: ' ,
-    'FAMI_COMELECHEDERIVADOS': '¿Consume productos lácteos? Ingrese 1 si sí, 0 si no: ' ,
-    'FAMI_COMECARNEPESCADOHUEVO': '¿Consume carne, pescado o huevos? Ingrese 1 si sí, 0 si no: ' ,
-    'FAMI_COMECEREALFRUTOSLEGUMBRE': '¿Consume cereales, frutas o legumbres? Ingrese 1 si sí, 0 si no: ' ,
-    'ESTU_DEDICACIONLECTURADIARIA': 'Ingrese la dedicación diaria a la lectura (1-5): ' ,
-    'ESTU_DEDICACIONINTERNET': 'Ingrese la dedicación diaria a Internet (1-5): ' ,
-    'ESTU_HORASSEMANATRABAJA': 'Ingrese las horas semanales de trabajo: ' ,
-    'COLE_CARACTER': 'Ingrese el carácter de la institución educativa (1-5): ' ,
-    'COLE_AREA_UBICACION': 'Ingrese el área de ubicación de la institución educativa (1-5): ' ,
-    'COLE_JORNADA': 'Ingrese la jornada de la institución educativa (1-5): ' ,
-    'EDAD': 'Ingrese la edad: '
+
+# Crea una instancia de la interfaz y pasa la lógica y la función de devolución de llamada
+nuevas_caracteristicas = {'Trabajo del padre': 'Ingrese el trabajo del padre:',
+                          'Nivel de educación del padre': 'Ingrese el nivel de educación del padre:',
+                          'Trabajo de la madre' : 'Ingrese el trabajo de la madre:',
+                          'Nivel de educación de la madre' : 'Ingrese el nivel de educación de la madre:',
+                          'Cuántos cuartos tiene en el hogar': 'Ingrese el número de cuartos en el hogar:',
+                          'Dedicación a la lectura diaria': 'Ingrese la dedicación diaria a la lectura:',
+                          'Tiempo dedicado en internet': 'Ingrese el tiempo dedicado en internet:',
+                          'Número de personas en el hogar': 'Ingrese el número de personas en el hogar:',
+                          'EDAD': 'Ingrese la edad: ',
+                          'Estrato de la vivienda': 'Ingrese el estrato de la vivienda:',
+                          'Frecuencia con la que consume carne, pescado o huevo': 'Ingrese la frecuencia con la que consume carne, pescado o huevo:',
+                          'Frecuencia con la que consume leche o derivados' : 'Ingrese la frecuencia con la que consume leche o derivados:',
+                          'Tiene consola de videojuegos' : 'Ingrese si tiene consola de videojuegos:',
+                          'Cual considera que es su nivel de inglés' : 'Ingrese el nivel de inglés que considera que tiene:',
+                          'Género' : 'Ingrese su género:',
+                          'Número de libros en el hogar' : 'Ingrese el número de libros en el hogar:'
+                          # Agrega más características según sea necesario
 }
 
-# Crear una instancia de la interfaz
-app = InterfazPrediccion(nuevas_caracteristicas, callback)
+app = InterfazPrediccion(logica_instancia, nuevas_caracteristicas, callback)
 app.mainloop()
-
-

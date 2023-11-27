@@ -9,55 +9,49 @@ class Modelo:
         self.X_train = None
         self.y_train = None
 
-    def preprocesar_datos(self):
-        columnas_a_eliminar = ['ESTU_GENERACION-E', 'COLE_MCPIO_UBICACION', 'COLE_DEPTO_UBICACION',
-                               'ESTU_MCPIO_PRESENTACION', 'ESTU_DEPTO_PRESENTACION', 'ESTU_TIPOREMUNERACION',
-                               'ESTU_NACIONALIDAD', 'ESTU_PAIS_RESIDE', 'ESTU_DEPTO_RESIDE', 'ESTU_MCPIO_RESIDE',
-                               'FAMI_ESTRATOVIVIENDA', 'FAMI_TRABAJOLABORPADRE', 'FAMI_TRABAJOLABORMADRE',
-                               'FAMI_TIENELAVADORA', 'FAMI_NUMLIBROS', 'FAMI_SITUACIONECONOMICA']
-
-        self.datos.drop(columnas_a_eliminar, axis='columns', inplace=True)
-
     def regresion(self):
-        columnas_a_mantener = ['FAMI_PERSONASHOGAR', 'FAMI_CUARTOSHOGAR', 'FAMI_EDUCACIONPADRE',
-                               'FAMI_EDUCACIONMADRE', 'ESTU_NSE_INDIVIDUAL', 'FAMI_TIENEINTERNET',
-                               'FAMI_TIENECOMPUTADOR', 'FAMI_TIENESERVICIOTV', 'FAMI_TIENEHORNOMICROOGAS',
-                               'FAMI_TIENEAUTOMOVIL', 'FAMI_TIENECONSOLAVIDEOJUEGOS', 'FAMI_TIENEMOTOCICLETA',
-                               'FAMI_COMELECHEDERIVADOS', 'FAMI_COMECARNEPESCADOHUEVO', 'FAMI_COMECEREALFRUTOSLEGUMBRE',
-                               'ESTU_DEDICACIONLECTURADIARIA', 'ESTU_DEDICACIONINTERNET', 'ESTU_HORASSEMANATRABAJA',
-                               'COLE_CARACTER', 'COLE_AREA_UBICACION', 'COLE_JORNADA', 'EDAD']
+        columnas_a_mantener = ['Trabajo del padre', 'Nivel de educación del padre',
+    'Trabajo de la madre', 'Nivel de educación de la madre', 'Cuántos cuartos tiene en el hogar',
+    'Dedicación a la lectura diaria', 'Tiempo dedicado en internet', 'Número de personas en el hogar',
+    'Estrato de la vivienda', 'Frecuencia con la que consume carne, pescado o huevo',
+    'Frecuencia con la que consume leche o derivados','Tiene consola de videojuegos',
+    'Cual considera que es su nivel de inglés','Género','Número de libros en el hogar',
+    'PUNT_GLOBAL']
 
-        datos_filtrados = self.datos[(self.datos['EDAD'] >= 10) & (self.datos['EDAD'] <= 90)]
 
         # Codificar columnas categóricas
-        datos_codificados = pd.get_dummies(datos_filtrados)
+        datos_codificados = pd.get_dummies(self.datos)
 
         # Definir características y etiquetas
         X = datos_codificados.drop('PUNT_GLOBAL', axis=1)
-        y = pd.cut(datos_codificados['PUNT_GLOBAL'], bins=4, labels=['Bajo', 'Intermedio ', 'Alto', 'Sobresaliente'])
+        y = pd.cut(datos_codificados['PUNT_GLOBAL'], bins=3, labels=['Bajo', 'Alto', 'Sobresaliente'])
 
         # Dividir datos en conjuntos de entrenamiento y prueba
         self.X_train, _, self.y_train, _ = train_test_split(X, y, test_size=0.4, random_state=0)
 
         # Crear y entrenar modelo
-        self.model = RandomForestClassifier(n_estimators=100, random_state=42)
+        self.model = RandomForestClassifier(max_depth = None, min_samples_leaf = 4, min_samples_split = 10, n_estimators = 100)
         self.model.fit(self.X_train, self.y_train)
 
     def predecir_nuevas_caracteristicas(self, nuevas_caracteristicas):
         if self.model is None:
             raise ValueError('Error: El modelo no ha sido entrenado. Por favor, llamar al método regresión primero')
 
-        # Convertir listas a tuplas
-        nuevas_caracteristicas = {key: tuple(value) for key, value in nuevas_caracteristicas.items()}
+        # Convertir las nuevas características en un DataFrame
+        df_nuevas_caracteristicas = pd.DataFrame([nuevas_caracteristicas])
 
-        # Ajustar las nuevas características para que coincidan con las columnas utilizadas durante el entrenamiento
-        nuevas_caracteristicas_ajustadas = pd.get_dummies(nuevas_caracteristicas)
+        # Aplicar codificación one-hot a las nuevas características
+        df_nuevas_codificadas = pd.get_dummies(df_nuevas_caracteristicas)
 
-        # Asegurarse de que todas las columnas utilizadas durante el entrenamiento estén presentes en las nuevas características
-        nuevas_caracteristicas_ajustadas = nuevas_caracteristicas_ajustadas.reindex(columns=self.X_train.columns,
-                                                                                    fill_value=0)
+        # Obtener la lista de columnas utilizadas durante el entrenamiento
+        columnas_entrenamiento = self.X_train.columns.tolist()
 
-        # Resultado de la predicción
-        resultado_prediccion = self.model.predict(nuevas_caracteristicas_ajustadas)
+        # Reindexar el DataFrame resultante con las columnas de entrenamiento y llenar con ceros las columnas faltantes
+        df_nuevas_codificadas = df_nuevas_codificadas.reindex(columns=columnas_entrenamiento, fill_value=0)
+
+        # Realizar la predicción con el modelo
+        resultado_prediccion = self.model.predict(df_nuevas_codificadas)
         print(f'Tus resultados serán: {resultado_prediccion[0]}')
         return resultado_prediccion[0]
+
+
