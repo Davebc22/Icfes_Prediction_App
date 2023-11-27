@@ -3,7 +3,7 @@ from firebase_admin import db, credentials
 
 # Authenticate to Firebase
 cred = credentials.Certificate("credential.json")
-firebase_admin.initialize_app(cred, {"databaseURL" : "https://fir-tutorial1-1e305-default-rtdb.firebaseio.com/"})
+firebase_admin.initialize_app(cred, {"databaseURL" : "null"})
 
 # Reference to the root node
 ref = db.reference("/")
