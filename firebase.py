@@ -1,33 +1,22 @@
+# firebase.py
 import firebase_admin
 from firebase_admin import db, credentials
 
-# Authenticate to Firebase
+# Initialize Firebase
 cred = credentials.Certificate("credential.json")
-firebase_admin.initialize_app(cred, {"databaseURL" : "null"})
+firebase_admin.initialize_app(cred, {"databaseURL" : "https://fir-tutorial1-1e305-default-rtdb.firebaseio.com/"})
+ref = db.reference("/usuarios")
 
-# Reference to the root node
-ref = db.reference("/")
+def update_data(nombre, sexo, resultado_modelo):
+    # Crear una nueva referencia para el usuario
+    user_ref = ref.push()
 
-# Function to update data in the database
-def update_data(nombre, sexo, resultado):
-    # Creating a new reference for the data
-    data_ref = ref.child("usuarios").push()
-
-    # Update the data with simplified structure
-    data_ref.update({
+    # Actualizar la información del usuario, incluyendo el resultado del modelo
+    user_ref.update({
         'Nombre': nombre,
         'Sexo': sexo,
-        'Resultado': resultado
+        'Resultado_Modelo': resultado_modelo  # Cambiado a 'Resultado_Modelo' para distinguirlo del 'Resultado' original
     })
 
-# Example usage
-nombre = "Benito A. Tocamelas"
-sexo = "Masculino"
-resultado = "Altísimo"
-
-# Update data in the database
-update_data(nombre, sexo, resultado)
-
-# Closing the Firebase app when done
-firebase_admin.delete_app(firebase_admin.get_app())
-
+    # Cerrar la aplicación de Firebase cuando haya terminado
+    firebase_admin.delete_app(firebase_admin.get_app())

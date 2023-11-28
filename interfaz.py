@@ -1,6 +1,4 @@
 import tkinter as tk
-import pandas as pd
-
 
 class InterfazPrediccion(tk.Tk):
     def __init__(self, logica, nuevas_caracteristicas, callback):

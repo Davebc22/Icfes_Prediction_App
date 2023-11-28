@@ -53,5 +53,3 @@ class Modelo:
         resultado_prediccion = self.model.predict(df_nuevas_codificadas)
         print(f'Tus resultados serán: {resultado_prediccion[0]}')
         return resultado_prediccion[0]
-
-
