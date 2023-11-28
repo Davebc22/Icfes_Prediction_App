@@ -1,0 +1,150 @@
+Distribución de variables:
+
+FAMI_PERSONASHOGAR: Número de personas en el hogar (continua) - Valor real mayor o igual a 1.
+
+FAMI_CUARTOSHOGAR: Número de cuartos en el hogar (continua) - Valor real mayor o igual a 1.
+
+FAMI_EDUCACIONPADRE: Nivel de educación del padre (discreta) - Puede ser:
+
+1: Educación básica primaria
+2: Educación básica secundaria
+3: Educación media técnica
+4: Educación media académica
+5: Educación técnica profesional
+6: Educación tecnológica
+7: Educación profesional
+8: Educación especializada de posgrado
+
+FAMI_EDUCACIONMADRE: Nivel de educación de la madre (discreta) - Puede ser:
+1: Educación básica primaria
+2: Educación básica secundaria
+3: Educación media técnica
+4: Educación media académica
+5: Educación técnica profesional
+6: Educación tecnológica
+7: Educación profesional
+8: Educación especializada de posgrado
+
+ESTU_NSE_INDIVIDUAL: Nivel socioeconómico del estudiante (discreta) - Puede ser:
+
+1: Bajo
+2: Medio bajo
+3: Medio
+4: Medio alto
+5: Alto
+FAMI_TIENEINTERNET: Tiene acceso a Internet (binaria) - Puede ser:
+
+0: No
+1: Sí
+FAMI_TIENECOMPUTADOR: Tiene computadora (binaria) - Puede ser:
+
+0: No
+1: Sí
+FAMI_TIENESERVICIOTV: Tiene servicio de TV (binaria) - Puede ser:
+
+0: No
+1: Sí
+FAMI_TIENEHORNOMICROOGAS: Tiene horno microondas (binaria) - Puede ser:
+
+0: No
+1: Sí
+FAMI_TIENEAUTOMOVIL: Tiene automóvil (binaria) - Puede ser:
+
+0: No
+1: Sí
+FAMI_TIENECONSOLAVIDEOJUEGOS: Tiene consola de videojuegos (binaria) - Puede ser:
+
+0: No
+1: Sí
+FAMI_TIENEMOTOCICLETA: Tiene motocicleta (binaria) - Puede ser:
+
+0: No
+1: Sí
+FAMI_COMELECHEDERIVADOS: Consume productos lácteos (binaria) - Puede ser:
+
+0: No
+1: Sí
+FAMI_COMECARNEPESCADOHUEVO: Consume carne, pescado y huevos (binaria) - Puede ser:
+
+0: No
+1: Sí
+FAMI_COMECEREALFRUTOSLEGUMBRE: Consume cereales, frutas y legumbres (binaria) - Puede ser:
+
+0: No
+1: Sí
+ESTU_DEDICACIONLECTURADIARIA: Dedica horas diarias a la lectura (discreta) - Puede ser cualquier número entero positivo.
+
+ESTU_DEDICACIONINTERNET: Dedica horas diarias a Internet (discreta) - Puede ser cualquier número entero positivo.
+
+ESTU_HORASSEMANATRABAJA: Horas semanales que trabaja el estudiante (discreta) - Puede ser cualquier número entero positivo.
+
+COLE_CARACTER: Carácter del colegio (discreta) - Puede ser:
+
+0: Oficial
+1: No oficial
+COLE_AREA_UBICACION: Área de ubicación del colegio (discreta) - Puede ser:
+
+0: Rural
+1: Urbana
+
+COLE_JORNADA: Jornada del colegio (discreta) - Puede ser:
+
+0: Mañana
+1: Tarde
+2: Noche
+EDAD: Edad del estudiante (continua) - Puede ser cualquier número real mayor o igual a 10 y menor o igual a 90, según tu filtro.
+
+
+
+# POSIBLE LLAMADA DE CLASE
+
+# PUREBA DEL MODELO
+
+# Ruta de los datos
+ruta_datos = 'icfes_bogota.csv'
+
+# Instanciar el procesador de datos
+procesador = ProcesadorDatos(ruta_datos)
+
+# Cargar y preprocesar datos
+procesador.preprocesar_datos()
+
+# Llamar al método regresion y realizar una nueva predicción
+procesador.regresion()
+
+
+
+
+# Nueva predicción
+nuevas_caracteristicas = pd.DataFrame({
+'FAMI_PERSONASHOGAR': [4],
+'FAMI_CUARTOSHOGAR': [3],
+'FAMI_EDUCACIONPADRE': [3],  # Por ejemplo, supongamos que el padre tiene educación técnica
+'FAMI_EDUCACIONMADRE': [5],  # Por ejemplo, supongamos que la madre tiene educación de posgrado
+'ESTU_NSE_INDIVIDUAL': [2],  # Por ejemplo, supongamos que el estudiante tiene un NSE medio
+'FAMI_TIENEINTERNET': [1],  # Por ejemplo, supongamos que la familia tiene acceso a Internet
+'FAMI_TIENECOMPUTADOR': [1],  # Por ejemplo, supongamos que la familia tiene computadora
+'FAMI_TIENESERVICIOTV': [0],  # Por ejemplo, supongamos que la familia no tiene servicio de TV
+'FAMI_TIENEHORNOMICROOGAS': [1],  # Por ejemplo, supongamos que la familia tiene horno microondas
+'FAMI_TIENEAUTOMOVIL': [0],  # Por ejemplo, supongamos que la familia no tiene automóvil
+'FAMI_TIENECONSOLAVIDEOJUEGOS': [1],  # Por ejemplo, supongamos que la familia tiene consola de videojuegos
+'FAMI_TIENEMOTOCICLETA': [0],  # Por ejemplo, supongamos que la familia no tiene motocicleta
+'FAMI_COMELECHEDERIVADOS': [1],  # Por ejemplo, supongamos que la familia consume productos lácteos
+'FAMI_COMECARNEPESCADOHUEVO': [1],  # Por ejemplo, supongamos que la familia consume carne, pescado y huevos
+'FAMI_COMECEREALFRUTOSLEGUMBRE': [1],
+# Por ejemplo, supongamos que la familia consume cereales, frutas y legumbres
+'ESTU_DEDICACIONLECTURADIARIA': [2],
+    # Por ejemplo, supongamos que el estudiante dedica 2 horas diarias a la lectura
+'ESTU_DEDICACIONINTERNET': [1],  # Por ejemplo, supongamos que el estudiante dedica 1 hora diaria a Internet
+'ESTU_HORASSEMANATRABAJA': [5],  # Por ejemplo, supongamos que el estudiante trabaja 5 horas a la semana
+'COLE_CARACTER': [0],  # Por ejemplo, supongamos que el colegio es de carácter oficial
+'COLE_AREA_UBICACION': [1],  # Por ejemplo, supongamos que el colegio está ubicado en área urbana
+'COLE_JORNADA': [1],  # Por ejemplo, supongamos que el colegio tiene jornada de tarde
+'EDAD': [16],  # Por ejemplo, supongamos que el estudiante tiene 16 años
+})
+# Predecir con nuevas características
+procesador.predecir_nuevas_caracteristicas(nuevas_caracteristicas)
+
+
+
+
